@@ -46,14 +46,23 @@ void readXMLFile(const char *path)
     //cout << pRoot->Value() << endl;
 
     //config.xml file
+
+    //Arena info
     pElem = pRoot->FirstChildElement("arquivoDaArena");
     svg_name = pElem->FindAttribute("nome")->Value();
     svg_type = pElem->FindAttribute("tipo")->Value();
     svg_path = pElem->FindAttribute("caminho")->Value();
+    //    cout << name << endl;
+    //    cout << type << endl;
+    //    cout << svg_path << endl;
 
-//    cout << name << endl;
-//    cout << type << endl;
-//    cout << svg_path << endl;
+    //Car info
+    pElem = pRoot->FirstChildElement("carro");
+    float velTiro = pElem->FindAttribute("velTiro")->FloatValue();
+    float velCarro = pElem->FindAttribute("velCarro")->FloatValue();
+
+    // cout << "velTiro " << velTiro << endl;
+    // cout << "velCarro " << velCarro << endl;
 
     //Path and name to svg file
 
@@ -148,27 +157,43 @@ void readXMLFile(const char *path)
                 // " width: " << rect.getWidth() << " height: " << rect.getHeight() << " colors: " <<
                 // rect.getRGBColors(RED) << ", " << rect.getRGBColors(GREEN) << ", " << rect.getRGBColors(BLUE) << endl;
             }
-    }//End of file read
+    } //End SVG file
 
     MainWindow.setHeight(2*arena[0].getRadius());
     MainWindow.setWidth(2*arena[0].getRadius());
     MainWindow.setTitle("Arena");
 
-    //Adjusting Y-Axis -> y = hy - y;
-    for(int i = 0; i < 2; i++)
-        arena[i].setYc(MainWindow.getHeight() - arena[i].getYc());
+    //Adjusting Y-Axis -> y = hy - y;  and Change center coordinate to (R,R)
 
+    //Calculating distance to new center
+    float dx = arena[0].getXc() - arena[0].getRadius(), dy = arena[0].getYc() - arena[0].getRadius();
+
+    //Changing center to coordinate (Radius, Radius)
+    for(int i = 0; i < 2; i++)
+    {
+        arena[i].setXc(arena[0].getRadius());
+        arena[i].setYc(arena[0].getRadius());
+    }
+
+    rect.setYc(rect.getYc() - dy);
+    rect.setXc(rect.getXc() - dx);
     rect.setYc(MainWindow.getHeight() - rect.getYc());
     rect.updateVertices();
     // cout << "x: " << rect.getXc() << "y: " << rect.getYc() << endl;
 
     for(vector<Circulo>::iterator it = enemies.begin(); it != enemies.end(); it++)
+    {
+        (*it).setXc((*it).getXc() - dx);
+        (*it).setYc((*it).getYc() - dy);
         (*it).setYc(MainWindow.getHeight() - (*it).getYc());
+    }
 
+    player.setXc(player.getXc() - dx);
+    player.setYc(player.getYc() - dy);
     player.setYc(MainWindow.getHeight() - player.getYc());
 
     // for(vector<Circulo>::iterator it = enemies.begin(); it != enemies.end(); it++)
-    //     cout << (*it).getId() << endl;
+    // cout << (*it).getId() << endl;
 
     return;
 }
@@ -203,21 +228,12 @@ void drawCircle(float xc, float yc, float radius, const float colors[3], int res
 
 void init(void)
 {
-    GLfloat xi, xf;
-    GLfloat yi, yf;
-
     /*Selecting background color*/
     //cout << " Janela "<< MainWindow.getBgColors(RED) << MainWindow.getBgColors(GREEN) << MainWindow.getBgColors(BLUE) << endl;
     glClearColor(MainWindow.getBgColors(RED),MainWindow.getBgColors(GREEN),MainWindow.getBgColors(BLUE), 0.0);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-
-    xi = arena[0].getXc() - arena[0].getRadius();
-    xf = arena[0].getXc() + arena[0].getRadius();
-    yi = arena[0].getYc() - arena[0].getRadius();
-    yf = arena[0].getYc() + arena[0].getRadius();
-
-    glOrtho(xi,xf,yi,yf,-1.0,1.0);
+    glOrtho(0.0, 2*arena[0].getRadius(), 0.0, 2*arena[0].getRadius(), -1.0, 1.0);
 }
 
 void display(void)
