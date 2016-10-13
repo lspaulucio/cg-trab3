@@ -29,8 +29,7 @@ void keyUp (unsigned char, int, int);
 
 //Drawing functions
 void drawRectangle(float, float, float, float, const float colors[3] = DEFAULT_COLOR);
-void drawCircle(float, float, float, const float colors[3] = DEFAULT_COLOR, int resolution=100);
-
-
+void drawCircle(float, float, float, const float colors[3] = DEFAULT_COLOR, int resolution = 100);
+void drawEllipse(float, float, float, float, const float colors[3] = DEFAULT_COLOR, int resolution = 100);
 
 #endif //FUNCOES_H

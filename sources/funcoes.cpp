@@ -226,6 +226,21 @@ void drawCircle(float xc, float yc, float radius, const float colors[3], int res
     glEnd();
 }
 
+void drawEllipse(float xc, float yc, float width, float height, const float colors[3], int resolution)
+{
+    float dx, dy;
+    glColor3fv((GLfloat*)(colors));
+    glBegin(GL_TRIANGLE_FAN);
+		glVertex2f(xc, yc);
+		for(int i = 0; i <= resolution; i++)
+        {
+            dx = xc + (width * cos(i * 2.0*M_PI / resolution));
+            dy = yc + (height * sin(i * 2.0*M_PI / resolution));
+			glVertex2f(dx, dy);
+		}
+    glEnd();
+}
+
 void init(void)
 {
     /*Selecting background color*/
