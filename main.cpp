@@ -9,6 +9,7 @@
 #include "sources/janela.h"
 #include "sources/retangulo.h"
 #include "sources/circulo.h"
+#include "sources/carro.h"
 
 using namespace tinyxml2;
 using namespace std;
@@ -16,9 +17,10 @@ using namespace std;
 //Global variables
 Janela MainWindow;
 vector<Circulo> enemies;
-Circulo player;
 Circulo arena[2];
 Retangulo rect;
+Carro player;
+
 int key_status[256] = {0};
 
 int main(int argc, char** argv)
@@ -32,6 +34,8 @@ int main(int argc, char** argv)
     glutCreateWindow(MainWindow.getTitle().c_str());
     init();
     glutDisplayFunc(display);
+    glutMouseFunc(mouse);
+    glutPassiveMotionFunc(passiveMouse);
     glutKeyboardFunc(keypress);
     glutKeyboardUpFunc(keyUp);
     glutIdleFunc(idle);

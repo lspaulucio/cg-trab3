@@ -26,7 +26,7 @@ class Janela
 
         const float getBgColors(COLOR_ID) const;
 
-        void setBgColors(const float[3]);
+        void setBgColors(const float colors[3]);
 
         const std::string &getTitle() const;
 

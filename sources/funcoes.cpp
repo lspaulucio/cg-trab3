@@ -1,10 +1,10 @@
 #include "funcoes.h"
 
 extern Janela MainWindow;
-extern Circulo player;
 extern Circulo arena[2];
 extern Retangulo rect;
 extern vector<Circulo> enemies;
+extern Carro player;
 extern int key_status[256];
 
 void readXMLFile(const char *path)
@@ -58,8 +58,8 @@ void readXMLFile(const char *path)
 
     //Car info
     pElem = pRoot->FirstChildElement("carro");
-    float velTiro = pElem->FindAttribute("velTiro")->FloatValue();
-    float velCarro = pElem->FindAttribute("velCarro")->FloatValue();
+    player.setSpeedShoot(pElem->FindAttribute("velTiro")->FloatValue());
+    player.setSpeedCar(pElem->FindAttribute("velCarro")->FloatValue());
 
     // cout << "velTiro " << velTiro << endl;
     // cout << "velCarro " << velCarro << endl;
@@ -126,7 +126,9 @@ void readXMLFile(const char *path)
             //cout << "Circulo " << "cx: " << c.getXc() << " cy: " << c.getYc() << " r: " << c.getRadius() <<
             //" colors: " << c.getRGBColors(RED) << ", " << c.getRGBColors(GREEN) << ", " << c.getRGBColors(BLUE) << endl;
             if(!c.getId().compare("Jogador"))
-                player = c;
+            {
+                player.copyInfo(c);
+            }
             else if(!c.getId().compare("Pista"))
                 {
                     if(arena[0].getRadius() > c.getRadius())
@@ -273,17 +275,35 @@ void idle(void)
 {
     float dx = 0, dy = 0;
     float tx, ty;
-    const float STEP = 1;
-
+    const float ROTATION_STEP = 2;
+    const float STEP = 2;
+    float wheelTheta = player.getWheelRotation();
     if(key_status['w'])
         dy += STEP;
     if(key_status['s'])
         dy -= STEP;
     if(key_status['d'])
-        dx += STEP;
+        wheelTheta -= ROTATION_STEP;
     if(key_status['a'])
-        dx -= STEP;
+        wheelTheta += ROTATION_STEP;
 
+    // Wheel rotation verification
+    if(wheelTheta < -45)
+        wheelTheta = -45;
+    else if(wheelTheta > 45)
+            wheelTheta = 45;
+
+    player.setWheelRotation(wheelTheta);
+
+    player.setWheelDirection(X_AXIS, cos(wheelTheta * M_PI/180.0));
+    player.setWheelDirection(Y_AXIS, sin(wheelTheta * M_PI/180.0));
+
+    //cout << "x = " << player.getWheelDirection()[X_AXIS] << " y = " << player.getWheelDirection()[Y_AXIS] << endl;
+
+
+    //End rotation verification
+
+    // Collision verification
     tx = player.getXc();
     ty = player.getYc();
 
@@ -317,6 +337,8 @@ void idle(void)
         player.setYc(ty);
     }
 
+    // End collision verification
+
     glutPostRedisplay();
 }
 
@@ -326,12 +348,14 @@ void keyUp (unsigned char key, int x, int y)
     {
         case 'w':
         case 'W':
-          key_status['w'] = 0;
+            key_status['w'] = 0;
+            player.setMoving(false);
           break;
 
         case 's':
         case 'S':
-          key_status['s'] = 0;
+            key_status['s'] = 0;
+            player.setMoving(false);
           break;
 
         case 'd':
@@ -352,12 +376,14 @@ void keypress (unsigned char key, int x, int y)
   {
       case 'w':
       case 'W':
-        key_status['w'] = 1;
+          key_status['w'] = 1;
+          player.setMoving(true);
         break;
 
       case 's':
       case 'S':
-        key_status['s'] = 1;
+          key_status['s'] = 1;
+          player.setMoving(true);
         break;
 
       case 'd':
@@ -370,7 +396,45 @@ void keypress (unsigned char key, int x, int y)
         key_status['a'] = 1;
         break;
 
-    //   case 'e':
-    //     exit(1);
+       case 'e':
+         exit(1);
   }
+}
+
+void mouse(int key, int state, int x, int y)
+{
+    int hy = MainWindow.getHeight();
+
+    y = hy - y; //Adjusting Y-Axis
+
+    if (key == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+    {
+
+    } else if(key == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+    {
+
+    }
+
+    if (key == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+    {
+
+    }
+}
+
+void mouseMotion(int x, int y)
+{
+
+}
+
+void passiveMouse(int x, int y)
+{
+    int hx = MainWindow.getWidth();
+    float theta = -90.0/hx*x + 45.0;
+
+    if(theta < -45)
+        theta = -45;
+    else if(theta > 45)
+            theta = 45;
+
+    player.setGunRotation(theta);
 }

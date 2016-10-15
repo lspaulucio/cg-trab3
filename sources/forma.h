@@ -19,31 +19,31 @@ class Forma
 
         Forma();
 
-        Forma(const Forma&);
+        Forma(const Forma& f);
 
         const float* getRGBColors() const;
 
-        const float getRGBColors(COLOR_ID) const;
+        const float getRGBColors(COLOR_ID id) const;
 
-        int colorVerification(std::string);
+        int colorVerification(std::string color);
 
-        void setRGBColors(const float[3]);
+        void setRGBColors(const float colors[3]);
 
-        void setRGBColors(std::string);
+        void setRGBColors(std::string color_name);
 
         float getXc() const;
 
-        void setXc(float);
+        void setXc(float xc);
 
         float getYc() const;
 
-        void setYc(float);
+        void setYc(float yc);
 
         const std::string &getId() const;
 
-        void setId(const std::string&);
+        void setId(const std::string &id);
 
-        virtual void translate(float, float)=0;
+        virtual void translate(float dx, float dy)=0;
 
         virtual void draw()=0;
 

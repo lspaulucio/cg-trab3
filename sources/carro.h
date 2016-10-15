@@ -1,0 +1,73 @@
+#ifndef CARRO_H
+#define CARRO_H
+
+#include "circulo.h"
+#include "retangulo.h"
+
+class Carro : public Circulo
+{
+
+private:
+
+    bool moving;
+    float speedCar, speedShoot;
+    float carDirection[3], gunDirection[3], wheelDirection[3];
+    float carRotation, gunRotation, wheelRotation;
+
+public:
+    Carro();
+
+    void copyInfo(Circulo& circle);
+
+    bool isMoving() const;
+
+    void setMoving(bool moving);
+
+    float getSpeedCar() const;
+
+    void setSpeedCar(float speedCar);
+
+    float getSpeedShoot() const;
+
+    void setSpeedShoot(float speedShoot);
+
+    const float *getCarDirection() const;
+
+    void setCarDirection(AXES axis, float direction);
+
+    const float *getGunDirection() const;
+
+    void setGunDirection(AXES axis, float direction);
+
+    const float *getWheelDirection() const;
+
+    void setWheelDirection(AXES axis, float direction);
+
+    float getCarRotation() const;
+
+    void setCarRotation(float rotCar);
+
+    float getGunRotation() const;
+
+    void setGunRotation(float rotation);
+
+    float getWheelRotation() const;
+
+    void setWheelRotation(float rotation);
+
+    void draw();
+
+    ~Carro();
+
+};
+
+const float AXIS_COLOR[3] = {0.32, 0.5, 0.74};
+//const float WHEEL_COLOR[3] = {0.32, 0.5, 0.74};
+const float WHEEL_COLOR[3] = {0, 0, 0};
+const float ELLIPSE_COLOR[3] = {0.0, 0.7, 0.32};
+const float BODY_COLOR[3] = {0.6, 0.74, 0.35};
+const float GUN_COLOR[3] = {0.4, 0.67, 0.46};
+
+const float START_DIRECTION[3] = {0.0, 1.0, 0.0};
+
+#endif //CARRO_H

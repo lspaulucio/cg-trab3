@@ -6,10 +6,10 @@ Circulo::Circulo()
     drawResolution = 100;
 }
 
-Circulo::Circulo(const Circulo &c): Forma(c)
+Circulo::Circulo(const Circulo &circle): Forma(circle)
 {
-    this->radius = c.radius;
-    this->drawResolution = c.drawResolution;
+    this->radius = circle.radius;
+    this->drawResolution = circle.drawResolution;
 }
 
 float Circulo::getRadius() const
@@ -17,9 +17,9 @@ float Circulo::getRadius() const
     return this->radius;
 }
 
-void Circulo::setDrawResolution(int new_resolution)
+void Circulo::setDrawResolution(int resolution)
 {
-    this->drawResolution = new_resolution;
+    this->drawResolution = resolution;
 }
 
 int Circulo::getDrawResolution() const
@@ -55,30 +55,30 @@ bool Circulo::insideCircle(float x, float y) const
     }
 }
 
-bool Circulo::insideCircle(Circulo &circ) const
+bool Circulo::insideCircle(Circulo &circle) const
 {
     float dx, dy, dist;
 
-    dx = this->getXc() - circ.getXc();
-    dy = this->getYc() - circ.getYc();
+    dx = this->getXc() - circle.getXc();
+    dy = this->getYc() - circle.getYc();
 
     dist = sqrt((dx*dx) + (dy*dy));
-    if(dist <= abs(this->radius - circ.getRadius()))
+    if(dist <= abs(this->radius - circle.getRadius()))
     {
         return true;
     }
     else return false;
 }
 
-bool Circulo::outsideCircle(Circulo &circ) const
+bool Circulo::outsideCircle(Circulo &circle) const
 {
     float dx, dy, dist;
 
-    dx = this->getXc() - circ.getXc();
-    dy = this->getYc() - circ.getYc();
+    dx = this->getXc() - circle.getXc();
+    dy = this->getYc() - circle.getYc();
 
     dist = sqrt((dx*dx) + (dy*dy));
-    if(dist >= (this->radius + circ.getRadius()))
+    if(dist >= (this->radius + circle.getRadius()))
     {
         return true;
     }

@@ -17,23 +17,23 @@ class Circulo: public Forma
 
         Circulo();
 
-        Circulo(const Circulo&);
+        Circulo(const Circulo& circle);
 
         float getRadius() const;
 
-        void setRadius(float);
+        void setRadius(float radius);
 
         int getDrawResolution() const;
 
-        void setDrawResolution(int);
+        void setDrawResolution(int resolution);
 
-        void translate(float, float);
+        void translate(float dx, float dy);
 
-        bool insideCircle(float, float) const;
+        bool insideCircle(float x, float y) const;
 
-        bool insideCircle(Circulo&) const;
+        bool insideCircle(Circulo& circle) const;
 
-        bool outsideCircle(Circulo&) const;
+        bool outsideCircle(Circulo& circle) const;
 
         void draw();
 

@@ -5,12 +5,12 @@ Forma::Forma()
     xc = yc = 0;
 }
 
-Forma::Forma(const Forma &c)
+Forma::Forma(const Forma &f)
 {
-    this->xc = c.xc;
-    this->yc = c.yc;
-    this->setRGBColors(c.getRGBColors());
-    this->id = c.id;
+    this->xc = f.xc;
+    this->yc = f.yc;
+    this->setRGBColors(f.getRGBColors());
+    this->id = f.id;
 }
 
 const float* Forma::getRGBColors() const

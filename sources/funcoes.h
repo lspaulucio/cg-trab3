@@ -12,24 +12,26 @@
 #include "janela.h"
 #include "circulo.h"
 #include "retangulo.h"
+#include "carro.h"
 
 using namespace std;
 using namespace tinyxml2;
 
-void readXMLFile(const char*);
+void readXMLFile(const char *path);
 
 //OpenGL functions
 void init(void);
 void display(void);
 void idle(void);
-void mouse(int, int, int, int);
-void mouseMotion(int, int);
-void keypress (unsigned char, int, int);
-void keyUp (unsigned char, int, int);
+void mouse(int key, int state, int x, int y);
+void mouseMotion(int x, int y);
+void keypress (unsigned char key, int x, int y);
+void keyUp (unsigned char key, int x, int y);
+void passiveMouse(int x, int y);
 
 //Drawing functions
-void drawRectangle(float, float, float, float, const float colors[3] = DEFAULT_COLOR);
-void drawCircle(float, float, float, const float colors[3] = DEFAULT_COLOR, int resolution = 100);
-void drawEllipse(float, float, float, float, const float colors[3] = DEFAULT_COLOR, int resolution = 100);
+void drawRectangle(float x1, float y1, float x2, float y2, const float colors[3] = DEFAULT_COLOR);
+void drawCircle(float xc, float yc, float radius, const float colors[3] = DEFAULT_COLOR, int resolution = 100);
+void drawEllipse(float xc, float yc, float width, float height, const float colors[3] = DEFAULT_COLOR, int resolution = 100);
 
 #endif //FUNCOES_H

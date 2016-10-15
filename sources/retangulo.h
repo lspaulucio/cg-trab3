@@ -14,25 +14,25 @@ public:
 
     Retangulo();
 
-    Retangulo(const Retangulo&);
+    Retangulo(const Retangulo &rect);
 
     float getWidth() const;
 
-    void setWidth(float);
+    void setWidth(float width);
 
     float getHeight() const;
 
-    void setHeight(float);
+    void setHeight(float height);
 
     const float* getVertices(int n) const;
 
     const float getVertices(int, AXES) const;
 
-    void translate(float, float);
+    void translate(float dx, float dy);
 
     void updateVertices();
 
-    bool insideSquare(float, float) const;
+    bool insideSquare(float x, float y) const;
 
     void draw();
 
