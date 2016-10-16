@@ -30,7 +30,7 @@ int main(int argc, char** argv)
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(MainWindow.getWidth(),MainWindow.getHeight());
-    glutInitWindowPosition(100,100);
+    glutInitWindowPosition(500,500);
     glutCreateWindow(MainWindow.getTitle().c_str());
     init();
     glutDisplayFunc(display);

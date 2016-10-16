@@ -275,33 +275,47 @@ void idle(void)
 {
     float dx = 0, dy = 0;
     float tx, ty;
-    const float ROTATION_STEP = 2;
+    const float WHEEL_ROTATION_STEP = 1;
     const float STEP = 2;
     float wheelTheta = player.getWheelRotation();
+    float move_vector[3] = {0}, *p;
+
+    static GLdouble previousTime = 0;
+    GLdouble currentTime;
+    GLdouble timeDiference;
+
+    // Elapsed time from the initiation of the game.
+    currentTime = glutGet(GLUT_ELAPSED_TIME);
+    timeDiference = currentTime - previousTime; // Elapsed time from the previous frame.
+    previousTime = currentTime; //Update previous time
+
     if(key_status['w'])
-        dy += STEP;
+    {
+        dy = STEP;
+        p = player.move(true, timeDiference);
+        move_vector[X_AXIS] = p[X_AXIS];
+        move_vector[Y_AXIS] = p[Y_AXIS];
+    }
     if(key_status['s'])
-        dy -= STEP;
+    {
+        dy = -STEP;
+        p = player.move(false, timeDiference);
+        move_vector[X_AXIS] = p[X_AXIS];
+        move_vector[Y_AXIS] = p[Y_AXIS];
+    }
     if(key_status['d'])
-        wheelTheta -= ROTATION_STEP;
+    {
+        wheelTheta -= WHEEL_ROTATION_STEP;
+        player.setWheelRotation(wheelTheta);
+    }
     if(key_status['a'])
-        wheelTheta += ROTATION_STEP;
+    {
+        wheelTheta += WHEEL_ROTATION_STEP;
+        player.setWheelRotation(wheelTheta);
+    }
 
-    // Wheel rotation verification
-    if(wheelTheta < -45)
-        wheelTheta = -45;
-    else if(wheelTheta > 45)
-            wheelTheta = 45;
-
-    player.setWheelRotation(wheelTheta);
-
-    player.setWheelDirection(X_AXIS, cos(wheelTheta * M_PI/180.0));
-    player.setWheelDirection(Y_AXIS, sin(wheelTheta * M_PI/180.0));
-
-    //cout << "x = " << player.getWheelDirection()[X_AXIS] << " y = " << player.getWheelDirection()[Y_AXIS] << endl;
-
-
-    //End rotation verification
+//    cout << "RODA: " << player.getWheelRotation() << endl;
+//    cout << "CARRO: " << player.getCarRotation() << endl;
 
     // Collision verification
     tx = player.getXc();
@@ -310,7 +324,7 @@ void idle(void)
     bool teste = true;
 
     // Test new position x
-    player.setXc(tx + dx);
+    player.setXc(tx + move_vector[X_AXIS]);
 
     for(vector<Circulo>::iterator it = enemies.begin(); it != enemies.end(); it++)
     {
@@ -324,7 +338,7 @@ void idle(void)
     }
 
     // Test new position y
-    player.setYc(ty + dy);
+    player.setYc(ty + move_vector[Y_AXIS]);
 
     for(vector<Circulo>::iterator it = enemies.begin(); it != enemies.end(); it++)
     {
@@ -407,34 +421,21 @@ void mouse(int key, int state, int x, int y)
 
     y = hy - y; //Adjusting Y-Axis
 
-    if (key == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-    {
-
-    } else if(key == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-    {
-
-    }
-
-    if (key == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
-    {
-
-    }
-}
-
-void mouseMotion(int x, int y)
-{
-
+    if (key == GLUT_LEFT_BUTTON && state == GLUT_DOWN);
 }
 
 void passiveMouse(int x, int y)
 {
     int hx = MainWindow.getWidth();
-    float theta = -90.0/hx*x + 45.0;
+    int theta = -90.0/hx*x + 135.0;
 
-    if(theta < -45)
-        theta = -45;
-    else if(theta > 45)
-            theta = 45;
+    float playerRotation = player.getCarRotation();
+
+    if(playerRotation > 180 && playerRotation < 360)
+        theta = 90.0/hx*x + 45.0;
 
     player.setGunRotation(theta);
+
+//    cout << player.getGunRotation() << endl;
+
 }

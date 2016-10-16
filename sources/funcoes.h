@@ -1,9 +1,10 @@
 #ifndef FUNCOES_H
 #define FUNCOES_H
 
-#include<GL/gl.h>
-#include<GL/glu.h>
-#include<GL/glut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
+#include <stdlib.h>
 #include <vector>
 #include <math.h>
 #include "types.h"
@@ -24,7 +25,6 @@ void init(void);
 void display(void);
 void idle(void);
 void mouse(int key, int state, int x, int y);
-void mouseMotion(int x, int y);
 void keypress (unsigned char key, int x, int y);
 void keyUp (unsigned char key, int x, int y);
 void passiveMouse(int x, int y);

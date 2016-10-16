@@ -57,17 +57,18 @@ public:
 
     void draw();
 
+    float* move(bool direction, double time);
+
     ~Carro();
 
 };
 
 const float AXIS_COLOR[3] = {0.32, 0.5, 0.74};
 //const float WHEEL_COLOR[3] = {0.32, 0.5, 0.74};
-const float WHEEL_COLOR[3] = {0, 0, 0};
+const float WHEEL_COLOR[3] = {1, 1, 0};
 const float ELLIPSE_COLOR[3] = {0.0, 0.7, 0.32};
 const float BODY_COLOR[3] = {0.6, 0.74, 0.35};
 const float GUN_COLOR[3] = {0.4, 0.67, 0.46};
 
-const float START_DIRECTION[3] = {0.0, 1.0, 0.0};
-
 #endif //CARRO_H
+
