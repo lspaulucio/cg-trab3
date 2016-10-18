@@ -61,7 +61,7 @@ public:
 
     float* move(bool direction, double time);
 
-//    Tiro shoot();
+    Tiro shoot();
 
     ~Carro();
 
@@ -75,4 +75,3 @@ const float BODY_COLOR[3] = {0.6, 0.74, 0.35};
 const float GUN_COLOR[3] = {0.4, 0.67, 0.46};
 
 #endif //CARRO_H
-

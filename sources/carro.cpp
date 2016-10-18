@@ -123,7 +123,7 @@ void Carro::setGunRotation(float rotation)
     this->setGunDirection(X_AXIS, cos(rotation * M_PI/180.0));
     this->setGunDirection(Y_AXIS, sin(rotation * M_PI/180.0));
 //    cout << "Theta: " << rotation << endl;
-//    cout << "Gun: x = " << getGunDirection()[X_AXIS] << " " << "y = " << getGunDirection()[Y_AXIS] << endl;
+    cout << "Gun: x = " << getGunDirection()[X_AXIS] << " " << "y = " << getGunDirection()[Y_AXIS] << endl;
 }
 
 float Carro::getWheelRotation() const
@@ -171,7 +171,6 @@ void Carro::draw()
     float exhaustWidth = 70;
     float exhaustHeight = 35;
     float exhaustFireHeight = getSpeedCar()*80/0.1;
-
     float CORRECTION_FACTOR = 5;
     float ROTATION_CORRECTION = -90.0; //Correction to make x axis to cos axis and y to sin axis
 
@@ -337,16 +336,34 @@ float* Carro::move(bool direction, double time)
     return position;
 }
 
-//Tiro Carro::shoot()
-//{
-//    Tiro shoot;
-//
-//    shoot.setShootSpeed(this->getSpeedShoot());
-//    shoot.setShootDirection(X_AXIS, this->getGunDirection()[X_AXIS]);
-//    shoot.setShootDirection(Y_AXIS, this->getGunDirection()[Y_AXIS]);
-//
-//    return shoot;
-//
-//}
+Tiro Carro::shoot()
+{
+    float carHeight = 300;
+    float gunHeight = 90;
+    float carWidth = 140;
+    float gunWidth = 20;
+    float wheelShaftWidth = 70;
+    float wheelLength = 125;
+    float scale_factor = (this->getRadius()*2) / (carWidth + 2*wheelShaftWidth + 2*wheelLength);
+
+    carHeight *= scale_factor;
+    gunHeight *= scale_factor;
+
+
+    float xc = getXc() + (getCarDirection()[X_AXIS] * carWidth/2 + getGunDirection()[X_AXIS] * gunWidth);
+    float yc = getYc() + (getCarDirection()[Y_AXIS] * carHeight/2 + getGunDirection()[Y_AXIS] * gunHeight);
+
+    Tiro shoot;
+    // cout << "p " << getXc() << " " << getYc() << endl;
+    // cout << "t " << xc << " " << yc<< endl;
+    shoot.setXc(xc);
+    shoot.setYc(yc);
+    shoot.setShootSpeed(this->getSpeedShoot());
+    shoot.setShootRotation(getCarRotation()+getGunRotation());
+    shoot.setShootDirection(X_AXIS, this->getGunDirection()[X_AXIS]);
+    shoot.setShootDirection(Y_AXIS, this->getGunDirection()[Y_AXIS]);
+
+    return shoot;
+}
 
 Carro::~Carro(){};

@@ -1,7 +1,6 @@
 #ifndef TIRO_H
 #define TIRO_H
 
-#include "funcoes.h"
 #include "circulo.h"
 
 const float DEFAULT_SHOOT_LENGHT = 5;

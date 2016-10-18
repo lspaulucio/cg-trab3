@@ -269,6 +269,9 @@ void display(void)
 
     player.draw();
 
+    for(vector<Tiro>::iterator it = shoots.begin(); it != shoots.end(); it++)
+        (*it).draw();
+
     glutSwapBuffers();
 }
 
@@ -310,7 +313,16 @@ void idle(void)
         wheelTheta += WHEEL_ROTATION_STEP;
         player.setWheelRotation(wheelTheta);
     }
+int cnt = 0;
+    for(vector<Tiro>::iterator it = shoots.begin(); it != shoots.end(); it++)
+    {
+        cnt++;
+        (*it).move(timeDiference);
 
+        // if((*it).isOutWindows())
+        // shoots.erase(it);
+    }
+    // cout << cnt << endl;
 //    cout << "RODA: " << player.getWheelRotation() << endl;
 //    cout << "CARRO: " << player.getCarRotation() << endl;
 
@@ -424,7 +436,11 @@ void mouse(int key, int state, int x, int y)
 
     y = hy - y; //Adjusting Y-Axis
 
-    if (key == GLUT_LEFT_BUTTON && state == GLUT_DOWN);
+    if (key == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+    {
+        Tiro t = player.shoot();
+        shoots.push_back(t);
+    }
 }
 
 void passiveMouse(int x, int y)
