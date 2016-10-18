@@ -5,6 +5,7 @@ extern Circulo arena[2];
 extern Retangulo rect;
 extern vector<Circulo> enemies;
 extern Carro player;
+extern vector<Tiro> shoots;
 extern int key_status[256];
 
 void readXMLFile(const char *path)
@@ -273,12 +274,10 @@ void display(void)
 
 void idle(void)
 {
-    float dx = 0, dy = 0;
     float tx, ty;
     const float WHEEL_ROTATION_STEP = 1;
-    const float STEP = 2;
     float wheelTheta = player.getWheelRotation();
-    float move_vector[3] = {0}, *p;
+    float move_vector[3] = {0}, *p = NULL;
 
     static GLdouble previousTime = 0;
     GLdouble currentTime;
@@ -291,14 +290,12 @@ void idle(void)
 
     if(key_status['w'])
     {
-        dy = STEP;
         p = player.move(true, timeDiference);
         move_vector[X_AXIS] = p[X_AXIS];
         move_vector[Y_AXIS] = p[Y_AXIS];
     }
     if(key_status['s'])
     {
-        dy = -STEP;
         p = player.move(false, timeDiference);
         move_vector[X_AXIS] = p[X_AXIS];
         move_vector[Y_AXIS] = p[Y_AXIS];
@@ -381,6 +378,9 @@ void keyUp (unsigned char key, int x, int y)
         case 'A':
           key_status['a'] = 0;
           break;
+
+        default:
+            break;
       }
 }
 
@@ -412,6 +412,9 @@ void keypress (unsigned char key, int x, int y)
 
        case 'e':
          exit(1);
+
+      default:
+          break;
   }
 }
 
@@ -427,12 +430,12 @@ void mouse(int key, int state, int x, int y)
 void passiveMouse(int x, int y)
 {
     int hx = MainWindow.getWidth();
-    int theta = -90.0/hx*x + 135.0;
+    int theta = -90.0/hx*x + 45.0;
 
     float playerRotation = player.getCarRotation();
 
     if(playerRotation > 180 && playerRotation < 360)
-        theta = 90.0/hx*x + 45.0;
+        theta = 90.0/hx*x - 45.0;
 
     player.setGunRotation(theta);
 

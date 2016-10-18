@@ -1,8 +1,10 @@
 #ifndef CARRO_H
 #define CARRO_H
 
+#include "funcoes.h"
 #include "circulo.h"
 #include "retangulo.h"
+#include "tiro.h"
 
 class Carro : public Circulo
 {
@@ -58,6 +60,8 @@ public:
     void draw();
 
     float* move(bool direction, double time);
+
+//    Tiro shoot();
 
     ~Carro();
 

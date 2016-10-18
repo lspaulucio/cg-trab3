@@ -14,6 +14,7 @@
 #include "circulo.h"
 #include "retangulo.h"
 #include "carro.h"
+#include "tiro.h"
 
 using namespace std;
 using namespace tinyxml2;

@@ -1,11 +1,11 @@
 #include "carro.h"
-#include "funcoes.h"
 
 Carro::Carro()
 {
     this->moving = false;
     this->speedCar = this->speedShoot = 0;
-    this->carRotation = this->gunRotation = 90;
+    this->carRotation = 90;
+    this->gunRotation = 0;
     this->wheelRotation = 0;
     this->setCarDirection(X_AXIS, 0);
     this->setCarDirection(Y_AXIS, 1);
@@ -109,12 +109,17 @@ float Carro::getGunRotation() const
 
 void Carro::setGunRotation(float rotation)
 {
-    if(rotation < 45)
-        rotation = 45;
-    else if(rotation > 135)
-            rotation = 135;
+    float const MAX_GUN_ROTATION = 45;
+
+    if(rotation < -MAX_GUN_ROTATION)
+        rotation = -MAX_GUN_ROTATION;
+    else if(rotation > MAX_GUN_ROTATION)
+            rotation = MAX_GUN_ROTATION;
 
     this->gunRotation = rotation;
+
+    rotation += getCarRotation();
+
     this->setGunDirection(X_AXIS, cos(rotation * M_PI/180.0));
     this->setGunDirection(Y_AXIS, sin(rotation * M_PI/180.0));
 //    cout << "Theta: " << rotation << endl;
@@ -163,14 +168,19 @@ void Carro::draw()
     float wheelLength = 125;
     float wheelWidth = 65;
     float wheelAxisDistance = 45;
+    float exhaustWidth = 70;
+    float exhaustHeight = 35;
+    float exhaustFireHeight = getSpeedCar()*80/0.1;
+
     float CORRECTION_FACTOR = 5;
     float ROTATION_CORRECTION = -90.0; //Correction to make x axis to cos axis and y to sin axis
+
     float scale_factor = (this->getRadius()*2) / (carWidth + 2*wheelShaftWidth + 2*wheelLength);
 
     glPushMatrix();
         //car body
         glTranslatef(this->getXc(), this->getYc(), 0);
-        glRotated(ROTATION_CORRECTION + this->carRotation, 0.0, 0.0, 1.0);
+        glRotated(ROTATION_CORRECTION + this->getCarRotation(), 0.0, 0.0, 1.0);
         glScalef(scale_factor, scale_factor, 1);
             drawRectangle(-carWidth/2, carHeight/2, carWidth/2, -carHeight/2, BODY_COLOR);
             drawEllipse(0.0, 0.0, ellipseSmallAxis, ellipseBigAxis, ELLIPSE_COLOR);
@@ -181,7 +191,7 @@ void Carro::draw()
             glTranslatef(0.0, carHeight/2 - CORRECTION_FACTOR, 0.0);
             glPushMatrix();
                 //drawing gun
-                glRotated(ROTATION_CORRECTION + this->gunRotation, 0.0, 0.0, 1);
+                glRotated(this->getGunRotation(), 0.0, 0.0, 1);
                 drawRectangle(-gunWidth/2, gunHeight, gunWidth/2, 0.0, GUN_COLOR);
             glPopMatrix();
 
@@ -194,7 +204,7 @@ void Carro::draw()
                     drawRectangle(-wheelShaftWidth/2, wheelShaftLength/2, wheelShaftWidth/2, -wheelShaftLength/2, AXIS_COLOR);
                 //drawing wheel upper left
                 glTranslatef(-wheelShaftWidth/2 - wheelWidth/2 + CORRECTION_FACTOR, 0, 0);
-                    glRotated(this->wheelRotation, 0.0, 0.0, 1);
+                    glRotated(this->getWheelRotation(), 0.0, 0.0, 1);
                     drawRectangle(-wheelWidth/2, wheelLength/2, wheelWidth/2, -wheelLength/2, WHEEL_COLOR);
             glPopMatrix();
 
@@ -204,7 +214,7 @@ void Carro::draw()
                     drawRectangle(-wheelShaftWidth/2, wheelShaftLength/2, wheelShaftWidth/2, -wheelShaftLength/2, AXIS_COLOR);
                 //drawing wheel upper right
                 glTranslatef(wheelShaftWidth/2 + wheelWidth/2 - CORRECTION_FACTOR, 0, 0);
-                    glRotated(this->wheelRotation, 0.0, 0.0, 1);
+                    glRotated(this->getWheelRotation(), 0.0, 0.0, 1);
                     drawRectangle(-wheelWidth/2, wheelLength/2, wheelWidth/2, -wheelLength/2, WHEEL_COLOR);
             glPopMatrix();
 
@@ -212,6 +222,32 @@ void Carro::draw()
 
             //moving to body bottom
             glTranslatef(0.0, -carHeight, 0.0);
+
+            //Drawing car exhaust
+            glPushMatrix();
+                drawRectangle(-exhaustWidth/2, 0.0, exhaustWidth/2, -exhaustHeight, GREY_COLOR);
+                glTranslatef(0.0, -exhaustHeight, 0.0);
+
+                if(isMoving()) //if car is moving draw fire
+                {
+                    glColor3fv(YELLOW_COLOR);
+                    glBegin(GL_POLYGON);
+                    glVertex3f(-exhaustWidth/2, 0.0, 0.0);
+                    glVertex3f(-exhaustWidth/3, -exhaustFireHeight/2, 0.0);
+                    glVertex3f(0, -exhaustFireHeight, 0.0);
+                    glVertex3f(exhaustWidth/3, -exhaustFireHeight/2, 0.0);
+                    glVertex3f(exhaustWidth/2, 0.0, 0.0);
+                    glEnd();
+
+                    glColor3fv(RED_COLOR);
+                    glBegin(GL_POLYGON);
+                    glVertex3f(-exhaustWidth/4, 0.0, 0.0);
+                    glVertex3f(0, -exhaustFireHeight/2, 0.0);
+                    glVertex3f(exhaustWidth/4, 0.0, 0.0);
+                    glEnd();
+                }
+
+            glPopMatrix();
 
             glPushMatrix();
                 //drawing wheelshaft bottom left
@@ -301,5 +337,16 @@ float* Carro::move(bool direction, double time)
     return position;
 }
 
+//Tiro Carro::shoot()
+//{
+//    Tiro shoot;
+//
+//    shoot.setShootSpeed(this->getSpeedShoot());
+//    shoot.setShootDirection(X_AXIS, this->getGunDirection()[X_AXIS]);
+//    shoot.setShootDirection(Y_AXIS, this->getGunDirection()[Y_AXIS]);
+//
+//    return shoot;
+//
+//}
 
 Carro::~Carro(){};
