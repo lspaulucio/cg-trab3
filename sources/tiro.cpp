@@ -2,73 +2,83 @@
 
 Tiro::Tiro()
 {
-    shootSpeed = shootRotation = 0;
-    shootDirection[X_AXIS] = shootDirection[Y_AXIS] = shootDirection[Z_AXIS] = 0;
+    shotSpeed = shotRotation = 0;
+    shotDirection[X_AXIS] = shotDirection[Y_AXIS] = shotDirection[Z_AXIS] = 0;
     this->setRadius(DEFAULT_SHOOT_LENGHT);
 }
 
 Tiro::Tiro(const Tiro &s) : Circulo(s)
 {
-    this->shootSpeed = s.shootSpeed;
-    this->shootDirection[X_AXIS] = s.shootDirection[X_AXIS];
-    this->shootDirection[Y_AXIS] = s.shootDirection[Y_AXIS];
-    this->shootRotation = s.shootRotation;
+    this->shotSpeed = s.shotSpeed;
+    this->shotDirection[X_AXIS] = s.shotDirection[X_AXIS];
+    this->shotDirection[Y_AXIS] = s.shotDirection[Y_AXIS];
+    this->shotRotation = s.shotRotation;
 }
 
 float Tiro::getShootSpeed() const
 {
-    return shootSpeed;
+    return shotSpeed;
 }
 
-void Tiro::setShootSpeed(float shootSpeed)
+void Tiro::setShootSpeed(float shotSpeed)
 {
-    Tiro::shootSpeed = shootSpeed;
+    Tiro::shotSpeed = shotSpeed;
 }
 
 const float *Tiro::getShootDirection() const
 {
-    return shootDirection;
+    return shotDirection;
 }
 
 void Tiro::setShootDirection(AXES axis, float direction)
 {
-    this->shootDirection[axis] = direction;
+    this->shotDirection[axis] = direction;
 }
 
 float Tiro::getShootRotation() const
 {
-    return shootRotation;
+    return shotRotation;
 }
 
-void Tiro::setShootRotation(float shootRotation)
+void Tiro::setShootRotation(float shotRotation)
 {
-    Tiro::shootRotation = shootRotation;
+    Tiro::shotRotation = shotRotation;
 }
 
 void Tiro::draw()
 {
     float dx, dy;
-    glColor3fv((GLfloat*)SHOOT_COLOR);
+    glColor3fv((GLfloat*)RED_COLOR);
     glBegin(GL_TRIANGLE_FAN);
-		glVertex2f(getXc(), getYc());
+    glVertex2f(getXc(), getYc());
 		for(int i = 0; i <= getDrawResolution(); i++)
         {
             dx = getXc() + (getRadius() * cos(i * 2.0*M_PI / getDrawResolution()));
             dy = getYc() + (getRadius() * sin(i * 2.0*M_PI / getDrawResolution()));
-			glVertex2f(dx, dy);
-		}
+            glVertex2f(dx, dy);
+        }
+    glEnd();
+    glColor3fv((GLfloat*)YELLOW_COLOR);
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(getXc(), getYc());
+    for(int i = 0; i <= getDrawResolution(); i++)
+    {
+        dx = getXc() + (getRadius()/2 * cos(i * 2.0*M_PI / getDrawResolution()));
+        dy = getYc() + (getRadius()/2 * sin(i * 2.0*M_PI / getDrawResolution()));
+        glVertex2f(dx, dy);
+    }
     glEnd();
 }
 
 void Tiro::move(double time)
 {
-    // shootDirection[X_AXIS] = (this->getShootSpeed() * time * cos(this->getShootRotation() * M_PI / 180.0));
-    // shootDirection[Y_AXIS] = (this->getShootSpeed() * time * sin(this->getShootRotation() * M_PI / 180.0));
-
     setXc(getXc() + (this->getShootSpeed() * time * getShootDirection()[X_AXIS]));
     setYc(getYc() + (this->getShootSpeed() * time * getShootDirection()[Y_AXIS]));
-
 }
 
-Tiro::~Tiro()
-{}
+bool Tiro::isInWindow(float x0, float y0, float x1, float y1)
+{
+    return x0 < this->getXc() && this->getXc() < x1 && y0 < this->getYc() && this->getYc() < y1;
+}
+
+Tiro::~Tiro(){}

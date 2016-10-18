@@ -10,9 +10,9 @@ class Tiro : public Circulo
 {
 
 private:
-    float shootSpeed;
-    float shootDirection[3];
-    float shootRotation;
+    float shotSpeed;
+    float shotDirection[3];
+    float shotRotation;
 
 public:
 
@@ -22,7 +22,7 @@ public:
 
     float getShootSpeed() const;
 
-    void setShootSpeed(float shootSpeed);
+    void setShootSpeed(float shotSpeed);
 
     const float *getShootDirection() const;
 
@@ -35,6 +35,8 @@ public:
     void draw();
 
     void move(double time);
+
+    bool isInWindow(float x0, float y0, float x1, float y1);
 
     ~Tiro();
 

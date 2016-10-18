@@ -59,8 +59,8 @@ void readXMLFile(const char *path)
 
     //Car info
     pElem = pRoot->FirstChildElement("carro");
-    player.setSpeedShoot(pElem->FindAttribute("velTiro")->FloatValue());
-    player.setSpeedCar(pElem->FindAttribute("velCarro")->FloatValue());
+    player.setShotSpeed(pElem->FindAttribute("velTiro")->FloatValue());
+    player.setCarSpeed(pElem->FindAttribute("velCarro")->FloatValue());
 
     // cout << "velTiro " << velTiro << endl;
     // cout << "velCarro " << velCarro << endl;
@@ -313,18 +313,6 @@ void idle(void)
         wheelTheta += WHEEL_ROTATION_STEP;
         player.setWheelRotation(wheelTheta);
     }
-int cnt = 0;
-    for(vector<Tiro>::iterator it = shoots.begin(); it != shoots.end(); it++)
-    {
-        cnt++;
-        (*it).move(timeDiference);
-
-        // if((*it).isOutWindows())
-        // shoots.erase(it);
-    }
-    // cout << cnt << endl;
-//    cout << "RODA: " << player.getWheelRotation() << endl;
-//    cout << "CARRO: " << player.getCarRotation() << endl;
 
     // Collision verification
     tx = player.getXc();
@@ -361,6 +349,21 @@ int cnt = 0;
     }
 
     // End collision verification
+
+    //Shot moving
+    for(vector<Tiro>::iterator it = shoots.begin(); it != shoots.end(); it++)
+    {
+        (*it).move(timeDiference);
+
+        if(!(*it).isInWindow(0.0, 0.0, 2*arena[0].getRadius(), 2*arena[0].getRadius()))
+        {
+            it = shoots.erase(it);
+            if(shoots.empty())
+                break;
+        }
+
+    }
+//    cout << shoots.size() << endl;
 
     glutPostRedisplay();
 }
@@ -438,6 +441,15 @@ void mouse(int key, int state, int x, int y)
 
     if (key == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
     {
+        int hx = MainWindow.getWidth();
+        int theta = -90.0/hx*x + 45.0;
+
+        //    float playerRotation = player.getCarRotation();
+        //    if(playerRotation > 180 && playerRotation < 360)
+        //        theta = 90.0/hx*x - 45.0;
+
+        player.setGunRotation(theta);
+
         Tiro t = player.shoot();
         shoots.push_back(t);
     }
@@ -448,10 +460,9 @@ void passiveMouse(int x, int y)
     int hx = MainWindow.getWidth();
     int theta = -90.0/hx*x + 45.0;
 
-    float playerRotation = player.getCarRotation();
-
-    if(playerRotation > 180 && playerRotation < 360)
-        theta = 90.0/hx*x - 45.0;
+//    float playerRotation = player.getCarRotation();
+//    if(playerRotation > 180 && playerRotation < 360)
+//        theta = 90.0/hx*x - 45.0;
 
     player.setGunRotation(theta);
 

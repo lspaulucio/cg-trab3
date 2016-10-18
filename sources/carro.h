@@ -12,7 +12,7 @@ class Carro : public Circulo
 private:
 
     bool moving;
-    float speedCar, speedShoot;
+    float carSpeed, shotSpeed;
     float carDirection[3], gunDirection[3], wheelDirection[3];
     float carRotation, gunRotation, wheelRotation;
 
@@ -25,13 +25,13 @@ public:
 
     void setMoving(bool moving);
 
-    float getSpeedCar() const;
+    float getCarSpeed() const;
 
-    void setSpeedCar(float speedCar);
+    void setCarSpeed(float carSpeed);
 
-    float getSpeedShoot() const;
+    float getShotSpeed() const;
 
-    void setSpeedShoot(float speedShoot);
+    void setShotSpeed(float shotSpeed);
 
     const float *getCarDirection() const;
 

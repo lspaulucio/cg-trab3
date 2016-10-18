@@ -35,6 +35,8 @@ run: all
 zip: clean
 	zip -r $(AUTHOR_NAME).zip main.cpp tinyxml2 sources Makefile
 
+rebuild: clean all
+
 clean:
 	@echo Cleaning object files
 	@rm -f *~ $(SOURCES:.cpp=.o) $(TINYXML2_SOURCE:.cpp=.o) $(EXECUTABLE_NAME)

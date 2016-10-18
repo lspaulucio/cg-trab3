@@ -3,7 +3,7 @@
 Carro::Carro()
 {
     this->moving = false;
-    this->speedCar = this->speedShoot = 0;
+    this->carSpeed = this->shotSpeed = 0;
     this->carRotation = 90;
     this->gunRotation = 0;
     this->wheelRotation = 0;
@@ -37,24 +37,24 @@ void Carro::setMoving(bool moving)
     this->moving = moving;
 }
 
-float Carro::getSpeedCar() const
+float Carro::getCarSpeed() const
 {
-    return speedCar;
+    return carSpeed;
 }
 
-void Carro::setSpeedCar(float speedCar)
+void Carro::setCarSpeed(float carSpeed)
 {
-    this->speedCar = speedCar;
+    this->carSpeed = carSpeed;
 }
 
-float Carro::getSpeedShoot() const
+float Carro::getShotSpeed() const
 {
-    return speedShoot;
+    return shotSpeed;
 }
 
-void Carro::setSpeedShoot(float speedShoot)
+void Carro::setShotSpeed(float shotSpeed)
 {
-    this->speedShoot = speedShoot;
+    this->shotSpeed = shotSpeed;
 }
 
 const float *Carro::getCarDirection() const
@@ -123,7 +123,7 @@ void Carro::setGunRotation(float rotation)
     this->setGunDirection(X_AXIS, cos(rotation * M_PI/180.0));
     this->setGunDirection(Y_AXIS, sin(rotation * M_PI/180.0));
 //    cout << "Theta: " << rotation << endl;
-    cout << "Gun: x = " << getGunDirection()[X_AXIS] << " " << "y = " << getGunDirection()[Y_AXIS] << endl;
+//    cout << "Gun: x = " << getGunDirection()[X_AXIS] << " " << "y = " << getGunDirection()[Y_AXIS] << endl;
 }
 
 float Carro::getWheelRotation() const
@@ -170,7 +170,7 @@ void Carro::draw()
     float wheelAxisDistance = 45;
     float exhaustWidth = 70;
     float exhaustHeight = 35;
-    float exhaustFireHeight = getSpeedCar()*80/0.1;
+    float exhaustFireHeight = getCarSpeed()*80/0.1;
     float CORRECTION_FACTOR = 5;
     float ROTATION_CORRECTION = -90.0; //Correction to make x axis to cos axis and y to sin axis
 
@@ -275,13 +275,13 @@ void Carro::draw()
 float* Carro::move(bool direction, double time)
 {
     static float position[3];
-    const float CAR_ROTATION_STEP = 2;
+    const float CAR_ROTATION_STEP = 1;
     float carRotation = this->getCarRotation();
     float wheelRotation = this->getWheelRotation();
     float theta = this->getCarDirection()[X_AXIS] * this->getWheelDirection()[X_AXIS] + this->getCarDirection()[Y_AXIS] * this->getWheelDirection()[Y_AXIS];
 
     theta = acos(theta);
-    theta = theta*180/M_PI;
+    theta *= 180/M_PI;
 
     if(this->getWheelRotation() + this->getCarRotation() < this->getCarRotation())
         theta *= -1;
@@ -305,8 +305,8 @@ float* Carro::move(bool direction, double time)
                 this->setWheelRotation(this->getWheelRotation() + CAR_ROTATION_STEP);
             }
 
-        position[X_AXIS] = (this->getSpeedCar() * time * cos(this->getCarRotation() * M_PI / 180.0));
-        position[Y_AXIS] = (this->getSpeedCar() * time * sin(this->getCarRotation() * M_PI / 180.0));
+        position[X_AXIS] = (this->getCarSpeed() * time * cos(this->getCarRotation() * M_PI / 180.0));
+        position[Y_AXIS] = (this->getCarSpeed() * time * sin(this->getCarRotation() * M_PI / 180.0));
         position[Z_AXIS] = 0;
     }
     else
@@ -328,8 +328,8 @@ float* Carro::move(bool direction, double time)
             this->setWheelRotation(this->getWheelRotation() + CAR_ROTATION_STEP);
         }
 
-        position[X_AXIS] = -(this->getSpeedCar() * time * cos(this->getCarRotation() * M_PI / 180.0));
-        position[Y_AXIS] = -(this->getSpeedCar() * time * sin(this->getCarRotation() * M_PI / 180.0));
+        position[X_AXIS] = -(this->getCarSpeed() * time * cos(this->getCarRotation() * M_PI / 180.0));
+        position[Y_AXIS] = -(this->getCarSpeed() * time * sin(this->getCarRotation() * M_PI / 180.0));
         position[Z_AXIS] = 0;
     }
 
@@ -341,7 +341,6 @@ Tiro Carro::shoot()
     float carHeight = 300;
     float gunHeight = 90;
     float carWidth = 140;
-    float gunWidth = 20;
     float wheelShaftWidth = 70;
     float wheelLength = 125;
     float scale_factor = (this->getRadius()*2) / (carWidth + 2*wheelShaftWidth + 2*wheelLength);
@@ -349,21 +348,27 @@ Tiro Carro::shoot()
     carHeight *= scale_factor;
     gunHeight *= scale_factor;
 
+    float shootRotation = getCarRotation() + getGunRotation();
 
-    float xc = getXc() + (getCarDirection()[X_AXIS] * carWidth/2 + getGunDirection()[X_AXIS] * gunWidth);
-    float yc = getYc() + (getCarDirection()[Y_AXIS] * carHeight/2 + getGunDirection()[Y_AXIS] * gunHeight);
 
-    Tiro shoot;
-    // cout << "p " << getXc() << " " << getYc() << endl;
-    // cout << "t " << xc << " " << yc<< endl;
-    shoot.setXc(xc);
-    shoot.setYc(yc);
-    shoot.setShootSpeed(this->getSpeedShoot());
-    shoot.setShootRotation(getCarRotation()+getGunRotation());
-    shoot.setShootDirection(X_AXIS, this->getGunDirection()[X_AXIS]);
-    shoot.setShootDirection(Y_AXIS, this->getGunDirection()[Y_AXIS]);
+    Tiro shot;
 
-    return shoot;
+    //Add radius to adjust shot to appear upper the gun
+    float xc = getXc() + (carHeight/2 * cos(this->getCarRotation() * M_PI / 180.0) + (gunHeight + shot.getRadius()) * cos(shootRotation * M_PI / 180.0));
+    float yc = getYc() + (carHeight/2 * sin(this->getCarRotation() * M_PI / 180.0) + (gunHeight + shot.getRadius()) * sin(shootRotation * M_PI / 180.0));
+
+//    cout <<  "p " << cos(this->getCarRotation() << " " << getYc() << endl;
+
+//    cout << "p " << getXc() << " " << getYc() << endl;
+//    cout << "t " << xc << " " << yc<< endl;
+    shot.setXc(xc);
+    shot.setYc(yc);
+    shot.setShootSpeed(this->getShotSpeed());
+    shot.setShootRotation(getCarRotation()+getGunRotation());
+    shot.setShootDirection(X_AXIS, this->getGunDirection()[X_AXIS]);
+    shot.setShootDirection(Y_AXIS, this->getGunDirection()[Y_AXIS]);
+
+    return shot;
 }
 
 Carro::~Carro(){};
