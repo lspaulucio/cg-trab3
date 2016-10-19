@@ -220,7 +220,7 @@ void Carro::draw()
             //////////////////////////////////// BOTTOM WHEELS /////////////////////////////////////////////////
 
             //moving to body bottom
-            glTranslatef(0.0, -carHeight, 0.0);
+            glTranslatef(0.0, -carHeight + CORRECTION_FACTOR, 0.0);
 
             //Drawing car exhaust
             glPushMatrix();
