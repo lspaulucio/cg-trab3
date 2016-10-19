@@ -275,7 +275,7 @@ void Carro::draw()
 float* Carro::move(bool direction, double time)
 {
     static float position[3];
-    const float CAR_ROTATION_STEP = 1;
+    const float CAR_ROTATION_STEP = 2;
     float carRotation = this->getCarRotation();
     float wheelRotation = this->getWheelRotation();
     float theta = this->getCarDirection()[X_AXIS] * this->getWheelDirection()[X_AXIS] + this->getCarDirection()[Y_AXIS] * this->getWheelDirection()[Y_AXIS];
