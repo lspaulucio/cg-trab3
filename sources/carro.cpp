@@ -316,14 +316,14 @@ float* Carro::move(bool direction, double time)
         {
             carRotation -= CAR_ROTATION_STEP;
             this->setCarRotation(carRotation);
-            // this->setWheelRotation(this->getWheelRotation());
+            this->setWheelRotation(this->getWheelRotation());
             // this->setWheelRotation(this->getWheelRotation() - CAR_ROTATION_STEP);
         }
         else if (theta < 0) //Wheel curved to right
         {
             carRotation += CAR_ROTATION_STEP;
             this->setCarRotation(carRotation);
-            // this->setWheelRotation(this->getWheelRotation());
+            this->setWheelRotation(this->getWheelRotation());
             // this->setWheelRotation(this->getWheelRotation() + CAR_ROTATION_STEP);
         }
 
