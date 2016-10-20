@@ -100,6 +100,8 @@ void Carro::setCarRotation(float rotation)
         rotation += 360;
 
     this->carRotation = rotation;
+    this->setCarDirection(X_AXIS, cos(rotation * M_PI/180.0));
+    this->setCarDirection(Y_AXIS, sin(rotation * M_PI/180.0));
 }
 
 float Carro::getGunRotation() const
@@ -151,7 +153,7 @@ void Carro::setWheelRotation(float rotation)
 
     this->setWheelDirection(X_AXIS, cos(rotation * M_PI/180.0));
     this->setWheelDirection(Y_AXIS, sin(rotation * M_PI/180.0));
-    //cout << "Roda: x = " << getWheelDirection()[X_AXIS] << " " << "y = " << getWheelDirection()[Y_AXIS] << endl;
+    // cout << "Roda: x = " << getWheelDirection()[X_AXIS] << " " << "y = " << getWheelDirection()[Y_AXIS] << endl;
 }
 
 void Carro::draw()
@@ -275,15 +277,16 @@ void Carro::draw()
 float* Carro::move(bool direction, double time)
 {
     static float position[3];
-    const float CAR_ROTATION_STEP = 2;
+    float CAR_ROTATION_STEP = 2;
     float carRotation = this->getCarRotation();
-    float wheelRotation = this->getWheelRotation();
     float theta = this->getCarDirection()[X_AXIS] * this->getWheelDirection()[X_AXIS] + this->getCarDirection()[Y_AXIS] * this->getWheelDirection()[Y_AXIS];
 
     theta = acos(theta);
+    CAR_ROTATION_STEP *= tan(theta); //Adjusting curve sensitivity
+
     theta *= 180/M_PI;
 
-    if(this->getWheelRotation() + this->getCarRotation() < this->getCarRotation())
+    if(this->getCarRotation() + this->getWheelRotation() < this->getCarRotation())
         theta *= -1;
 
     if(direction)
@@ -292,17 +295,15 @@ float* Carro::move(bool direction, double time)
         {
             carRotation += CAR_ROTATION_STEP;
             this->setCarRotation(carRotation);
-            if(abs(int(carRotation - wheelRotation)) <= 1)
-                this->setWheelRotation(carRotation);
-            this->setWheelRotation(this->getWheelRotation() - CAR_ROTATION_STEP);
+            this->setWheelRotation(this->getWheelRotation());
+            // this->setWheelRotation(this->getWheelRotation() - CAR_ROTATION_STEP);
         }
         else if (theta < 0) //Wheel curved to right
             {
                 carRotation -= CAR_ROTATION_STEP;
                 this->setCarRotation(carRotation);
-                if(abs(int(carRotation - wheelRotation)) <= 1)
-                    this->setWheelRotation(carRotation);
-                this->setWheelRotation(this->getWheelRotation() + CAR_ROTATION_STEP);
+                this->setWheelRotation(this->getWheelRotation());
+                // this->setWheelRotation(this->getWheelRotation() + CAR_ROTATION_STEP);
             }
 
         position[X_AXIS] = (this->getCarSpeed() * time * cos(this->getCarRotation() * M_PI / 180.0));
@@ -315,17 +316,15 @@ float* Carro::move(bool direction, double time)
         {
             carRotation -= CAR_ROTATION_STEP;
             this->setCarRotation(carRotation);
-            if(abs(int(carRotation - wheelRotation)) <= 1)
-                this->setWheelRotation(carRotation);
-            this->setWheelRotation(this->getWheelRotation() - CAR_ROTATION_STEP);
+            // this->setWheelRotation(this->getWheelRotation());
+            // this->setWheelRotation(this->getWheelRotation() - CAR_ROTATION_STEP);
         }
         else if (theta < 0) //Wheel curved to right
         {
             carRotation += CAR_ROTATION_STEP;
             this->setCarRotation(carRotation);
-            if(abs(int(carRotation - wheelRotation)) <= 1)
-                this->setWheelRotation(carRotation);
-            this->setWheelRotation(this->getWheelRotation() + CAR_ROTATION_STEP);
+            // this->setWheelRotation(this->getWheelRotation());
+            // this->setWheelRotation(this->getWheelRotation() + CAR_ROTATION_STEP);
         }
 
         position[X_AXIS] = -(this->getCarSpeed() * time * cos(this->getCarRotation() * M_PI / 180.0));
