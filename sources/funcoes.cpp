@@ -442,7 +442,7 @@ void mouse(int key, int state, int x, int y)
     if (key == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
     {
         int hx = MainWindow.getWidth();
-        int theta = -90.0/hx*x + 45.0;
+        int theta = -120.0/hx*x + 60.0;
 
         player.setGunRotation(theta);
 
@@ -454,14 +454,10 @@ void mouse(int key, int state, int x, int y)
 void passiveMouse(int x, int y)
 {
     int hx = MainWindow.getWidth();
-    int theta = -90.0/hx*x + 45.0;
-
-//    float playerRotation = player.getCarRotation();
-//    if(playerRotation > 180 && playerRotation < 360)
-//        theta = 90.0/hx*x - 45.0;
+    int theta = -120.0/hx*x + 60.0;
 
     player.setGunRotation(theta);
 
-//    cout << player.getGunRotation() << endl;
+    // cout << player.getGunRotation() << endl;
 
 }
