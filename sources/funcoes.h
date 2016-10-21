@@ -6,6 +6,7 @@
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <vector>
+#include <list>
 #include <math.h>
 #include "types.h"
 #include "../tinyxml2/tinyxml2.h"

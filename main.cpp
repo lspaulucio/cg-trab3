@@ -20,7 +20,7 @@ vector<Circulo> enemies;
 Circulo arena[2];
 Retangulo rect;
 Carro player;
-vector<Tiro> shoots;
+list<Tiro> shoots;
 
 int key_status[256] = {0};
 

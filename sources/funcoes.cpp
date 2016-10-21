@@ -5,7 +5,7 @@ extern Circulo arena[2];
 extern Retangulo rect;
 extern vector<Circulo> enemies;
 extern Carro player;
-extern vector<Tiro> shoots;
+extern list<Tiro> shoots;
 extern int key_status[256];
 
 void readXMLFile(const char *path)
@@ -269,7 +269,7 @@ void display(void)
 
     player.draw();
 
-    for(vector<Tiro>::iterator it = shoots.begin(); it != shoots.end(); it++)
+    for(list<Tiro>::iterator it = shoots.begin(); it != shoots.end(); it++)
         (*it).draw();
 
     glutSwapBuffers();
@@ -351,7 +351,7 @@ void idle(void)
     // End collision verification
 
     //Shot moving
-    for(vector<Tiro>::iterator it = shoots.begin(); it != shoots.end(); it++)
+    for(list<Tiro>::iterator it = shoots.begin(); it != shoots.end(); it++)
     {
         (*it).move(timeDiference);
 
