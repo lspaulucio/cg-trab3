@@ -69,7 +69,7 @@ public:
 
 const float AXIS_COLOR[3] = {0.32, 0.5, 0.74};
 //const float WHEEL_COLOR[3] = {0.32, 0.5, 0.74};
-const float WHEEL_COLOR[3] = {1, 1, 0};
+const float WHEEL_COLOR[3] = {0.68, 0.68, 0.68};
 const float ELLIPSE_COLOR[3] = {0.0, 0.7, 0.32};
 const float BODY_COLOR[3] = {0.6, 0.74, 0.35};
 const float GUN_COLOR[3] = {0.4, 0.67, 0.46};
