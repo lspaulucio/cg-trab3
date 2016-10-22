@@ -5,7 +5,7 @@
 **Clone Repository**
 
 ```
-git clone https://github.com/lspaulucio/cg-trab2.git
+git clone https://github.com/lspaulucio/cg-trab3.git
 ```
 
 ***PS:  Make sure that you have installed all dependeces***
